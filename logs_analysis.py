@@ -63,7 +63,7 @@ def print_top_articles():
                LIMIT 3;"""
     results = execute_query(query)
 
-    header = 'Top 3 Articles of All Time'
+    header = 'Top 3 Articles by All Time Views'
     print(header)
     print('-' * len(header))
     for title, views in results:
@@ -72,10 +72,17 @@ def print_top_articles():
 
 def print_top_authors():
     """Prints a list of authors ranked by article views."""
-    query = "<put your SQL query here>"
+    query = """SELECT author, SUM(views) AS views
+               FROM article_views
+               GROUP BY author
+               ORDER BY views DESC;"""
     results = execute_query(query)
-
-    # add code to print results
+    
+    header = 'Top Authors by All Time Views'
+    print(header)
+    print('-' * len(header))
+    for title, views in results:
+        print('\"{}\" -- {} views'.format(title, views))
 
 def print_error_days():
     """Prints out the days where more than 1% of logged access requests were errors."""
@@ -86,5 +93,6 @@ def print_error_days():
 
 if __name__ == '__main__':
     print_top_articles()
-    #print_top_authors()
+    print('\n')
+    print_top_authors()
     #print_error_days()

@@ -82,17 +82,26 @@ def print_top_authors():
     print(header)
     print('-' * len(header))
     for title, views in results:
-        print('\"{}\" -- {} views'.format(title, views))
+        print('{} -- {} views'.format(title, views))
 
 def print_error_days():
     """Prints out the days where more than 1% of logged access requests were errors."""
-    query = "<put your SQL query here>"
+    query = """SELECT date, (error_404::numeric / access_request) AS error_rate
+               FROM daily_error_summary
+               WHERE (error_404::numeric / access_request) > 0.01
+               ORDER BY date;"""
     results = execute_query(query)
-
-    # add code to print results
+    
+    header = 'Days With Over 1% Error Access Rate'
+    print(header)
+    print('-' * len(header))
+    for log_date, error_rate in results:
+        print('{0:%B %d, %Y} -- {1:.2f}% errors'.format(log_date, error_rate * 100))
 
 if __name__ == '__main__':
     print_top_articles()
     print('\n')
     print_top_authors()
-    #print_error_days()
+    print('\n')
+    print_error_days()
+

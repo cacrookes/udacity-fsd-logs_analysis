@@ -2,7 +2,12 @@
 
 ## Project Description
 
-TODO
+This project was created as one of the assignments for [Udacity's Full Stack Web Developer Nanodegree](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004).
+
+This project creates a mock database called *news* for a fictional news website. The python script, *logs_analysis.py* queries the *news* database using psycopg2 to generate a report and print it to the screen. The report lists:
+1. The top 3 all time most viewed articles on the news site.
+2. A ranking of authors based on total article views.
+3. A list of days where more than 1% of access requests to the site were errors.
 
 ## Requirements
 This project was tested with:

@@ -93,7 +93,8 @@ def print_top_articles(limit='all'):
     # create a list of nicely formatted rows to print later
     answers = ['\"{}\" -- {} views'.format(title, views)
                for title, views in results]
-    header = 'Top 3 Articles by All Time Views'
+    header = 'Top Articles By All Time Views' if limit=='all' else \
+             'Top {} Articles By All Time Views'.format(limit)
     __print_results(header, answers)
 
 
@@ -117,7 +118,8 @@ def print_top_authors(limit='all'):
         query += ' LIMIT %s;'
         results = execute_query(query, [limit,])
         
-    header = 'Top Authors by All Time Views'
+    header = 'Top Authors By All Time Views' if limit=='all' else \
+             'Top {} Authors By All Time Views'.format(limit)
     # create a list of nicely formatted rows to print later
     answers = ['{} -- {} views'.format(title, views) 
                for title, views in results]

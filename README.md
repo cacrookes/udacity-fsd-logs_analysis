@@ -75,7 +75,7 @@ LEFT JOIN authors
 ON articles.author = authors.id;
 ```
 
-*article_views* creates a table of all articles with the name of the author and the number of times the articl was viewed on the site.
+*article_views* creates a table of all articles with the name of the author and the number of times the article was viewed on the site.
 - title: title of the article
 - author: full name of the article's author
 - views: the number of times the article has been accessed to date 

@@ -36,10 +36,25 @@ def __db_connect():
         print(error)
 
 
+def __print_results(header, answers):
+    """ Prints a section of a report.
+
+        Args:
+            header - (string) The section header to print
+
+            answers - a list of strings to print, row by row
+    """
+    print(header)
+    print('-' * len(header))
+    print(*answers, sep='\n')
+    print('\n')
+
+
 def execute_query(query):
     """execute_query takes an SQL query as a parameter.
         Executes the query and returns the results as a list of tuples.
-       args:
+       
+       Args:
            query - an SQL query statement to be executed.
 
        returns:
@@ -62,12 +77,11 @@ def print_top_articles():
                ORDER BY views DESC
                LIMIT 3;"""
     results = execute_query(query)
-
+    # create a list of nicely formatted rows to print later
+    answers = ['\"{}\" -- {} views'.format(title, views)
+               for title, views in results]
     header = 'Top 3 Articles by All Time Views'
-    print(header)
-    print('-' * len(header))
-    for title, views in results:
-        print('\"{}\" -- {} views'.format(title, views))
+    __print_results(header, answers)
 
 
 def print_top_authors():
@@ -77,12 +91,11 @@ def print_top_authors():
                GROUP BY author
                ORDER BY views DESC;"""
     results = execute_query(query)
-
     header = 'Top Authors by All Time Views'
-    print(header)
-    print('-' * len(header))
-    for title, views in results:
-        print('{} -- {} views'.format(title, views))
+    # create a list of nicely formatted rows to print later
+    answers = ['{} -- {} views'.format(title, views) 
+               for title, views in results]
+    __print_results(header, answers)
 
 
 def print_error_days():
@@ -94,17 +107,15 @@ def print_error_days():
                WHERE (error_404::numeric / access_request) > 0.01
                ORDER BY date;"""
     results = execute_query(query)
-
     header = 'Days With Over 1% Error Access Rate'
-    print(header)
-    print('-' * len(header))
-    for log_date, error_rate in results:
-        print('{0:%B %d, %Y} -- {1:.2f}% errors'
-              .format(log_date, error_rate * 100))
+    # create a list of nicely formatted rows to print later
+    answers = ['{0:%B %d, %Y} -- {1:.2f}% errors'
+              .format(log_date, error_rate * 100) 
+              for log_date, error_rate in results]
+    __print_results(header, answers)
+
 
 if __name__ == '__main__':
     print_top_articles()
-    print('\n')
     print_top_authors()
-    print('\n')
     print_error_days()

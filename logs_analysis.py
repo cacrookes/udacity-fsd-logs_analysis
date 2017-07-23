@@ -37,7 +37,7 @@ def __db_connect():
 
 
 def execute_query(query):
-     """execute_query takes an SQL query as a parameter. 
+    """execute_query takes an SQL query as a parameter. 
         Executes the query and returns the results as a list of tuples.
        args:
            query - an SQL query statement to be executed.
@@ -45,8 +45,8 @@ def execute_query(query):
        returns:
            A list of tuples containing the results of the query.
     """
-   try:
-        db, c = connect()
+    try:
+        db, c = __db_connect()
         c.execute(query)
         results = c.fetchall()
         db.close()
@@ -57,10 +57,18 @@ def execute_query(query):
 
 def print_top_articles():
     """Prints out the top 3 articles of all time."""
-    query = "<put your SQL query here>"
+    query = """SELECT title, views
+               FROM article_views
+               ORDER BY views DESC
+               LIMIT 3;"""
     results = execute_query(query)
 
-    # add code to print results
+    header = 'Top 3 Articles of All Time'
+    print(header)
+    print('-' * len(header))
+    for title, views in results:
+        print('\"{}\" -- {} views'.format(title, views))
+    
 
 def print_top_authors():
     """Prints a list of authors ranked by article views."""
@@ -78,5 +86,5 @@ def print_error_days():
 
 if __name__ == '__main__':
     print_top_articles()
-    print_top_authors()
-    print_error_days()
+    #print_top_authors()
+    #print_error_days()

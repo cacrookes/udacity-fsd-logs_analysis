@@ -31,4 +31,62 @@ To set-up the database, follow these steps:
 
 ## Database Structure
 
-TODO
+### Tables
+
+- **authors**: Contains info on authors of articles
+  - id: serial integer, unique identifier for each author
+  - name: full name of the author
+  - bio: the author's biograpy
+- **articles**: Contains info on articles that appear on the news site
+  - id: serial integer, unique identifier for each article
+  - author: integer representing the id of the article's author
+  - title: title of the article
+  - slug: the article's url slug
+  - lead: description of the article
+  - body: the main text of the article
+  - time: time the article was last updated
+- **log**: Contains a log of access requests to the news site
+  - id: unique identifier for the access request
+  - path: relative url that was requested
+  - ip: ip address that sent the request
+  - method: HTTP request type. e.g. GET
+  - status: request status. e.g. '200 OK', '404 NOT FOUND'
+  - time: datetime field storing the time of the request
+
+### Views
+
+In addition to the original tables, the following views are created when running **database_setup.sql**
+
+#### article_views
+```sql
+CREATE VIEW article_views AS 
+SELECT articles.title, authors.name as author, log.views
+FROM articles INNER JOIN
+    (SELECT path, count(*) as views
+    FROM log 
+    GROUP BY path) AS log
+ON '/article/' || articles.slug = log.path
+LEFT JOIN authors 
+ON articles.author = authors.id;
+```
+
+*article_views* creates a table of all articles with the name of the author and the number of times the articl was viewed on the site.
+- title: title of the article
+- author: full name of the article's author
+- views: the number of times the article has been accessed to date 
+
+#### daily_error_summary
+```sql
+CREATE VIEW daily_error_summary AS
+SELECT time::date AS date,
+COUNT(*) FILTER (WHERE status = '404 NOT FOUND') AS error_404,
+COUNT(*) AS access_request
+FROM log
+GROUP BY time::date;
+```
+
+*daily_error_summary* creates a table showing the number of *404 NOT FOUND* errors and total access requests for each day.
+- date: date summarized by the row
+- error_404: the number of *404 NOT FOUND* errors for the site on that date
+- access_requests: the total number of hits for the site, including successful and unsuccessful requests, for that day
+

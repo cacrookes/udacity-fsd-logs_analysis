@@ -50,19 +50,21 @@ def __print_results(header, answers):
     print('\n')
 
 
-def execute_query(query):
+def execute_query(query, data=[]):
     """execute_query takes an SQL query as a parameter.
         Executes the query and returns the results as a list of tuples.
        
        Args:
            query - an SQL query statement to be executed.
 
+           data - a list of paramenters to pass to the query statement
+
        returns:
            A list of tuples containing the results of the query.
     """
     try:
         db, c = __db_connect()
-        c.execute(query)
+        c.execute(query, data)
         results = c.fetchall()
         db.close()
         return results
@@ -70,13 +72,22 @@ def execute_query(query):
         print(error)
 
 
-def print_top_articles():
-    """Prints out the top 3 articles of all time."""
+def print_top_articles(limit = 'all'):
+    """Prints out the top 3 articles of all time.
+    
+        Args:
+          limit - specifies the number of results to return. Defaults to 'all'  
+    """
     query = """SELECT title, views
                FROM article_views
-               ORDER BY views DESC
-               LIMIT 3;"""
-    results = execute_query(query)
+               ORDER BY views DESC"""
+    if limit == 'all':
+        query += ';'
+        results = execute_query(query)
+    else:
+        query += ' LIMIT %s;'
+        results = execute_query(query, [limit,])
+
     # create a list of nicely formatted rows to print later
     answers = ['\"{}\" -- {} views'.format(title, views)
                for title, views in results]
@@ -116,6 +127,6 @@ def print_error_days():
 
 
 if __name__ == '__main__':
-    print_top_articles()
+    print_top_articles(3)
     print_top_authors()
     print_error_days()

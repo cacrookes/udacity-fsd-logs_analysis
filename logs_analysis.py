@@ -72,15 +72,17 @@ def execute_query(query, data=[]):
         print(error)
 
 
-def print_top_articles(limit = 'all'):
+def print_top_articles(limit='all'):
     """Prints out the top 3 articles of all time.
     
         Args:
-          limit - specifies the number of results to return. Defaults to 'all'  
+          limit - specifies the number of results to return. Defaults to 'all'.  
     """
     query = """SELECT title, views
                FROM article_views
                ORDER BY views DESC"""
+    
+    # if a limit is specified, append limit clause to SQL query
     if limit == 'all':
         query += ';'
         results = execute_query(query)
@@ -95,13 +97,26 @@ def print_top_articles(limit = 'all'):
     __print_results(header, answers)
 
 
-def print_top_authors():
-    """Prints a list of authors ranked by article views."""
+def print_top_authors(limit='all'):
+    """Prints a list of authors ranked by article views.
+        
+        Args:
+          limit - specifies the number of results to return. Defaults to 'all'.
+    """
     query = """SELECT author, SUM(views) AS views
                FROM article_views
                GROUP BY author
-               ORDER BY views DESC;"""
-    results = execute_query(query)
+               ORDER BY views DESC"""
+
+
+     # if a limit is specified, append limit clause to SQL query
+    if limit == 'all':
+        query += ';'
+        results = execute_query(query)
+    else:
+        query += ' LIMIT %s;'
+        results = execute_query(query, [limit,])
+        
     header = 'Top Authors by All Time Views'
     # create a list of nicely formatted rows to print later
     answers = ['{} -- {} views'.format(title, views) 

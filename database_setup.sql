@@ -22,11 +22,11 @@ ON '/article/' || articles.slug = log.path
 LEFT JOIN authors 
 ON articles.author = authors.id;
 
--- daily_error_summary displays a table summarizing the number of 404 access requests
--- and total access requests
+-- daily_error_summary displays a table summarizing the error rate for each day
+-- as a percent.
 CREATE VIEW daily_error_summary AS
 SELECT time::date AS date,
-COUNT(*) FILTER (WHERE status = '404 NOT FOUND') AS error_404,
-COUNT(*) AS access_request
+    100 * (COUNT(*) FILTER (WHERE status = '404 NOT FOUND') / 
+           COUNT(*)::numeric) AS error_percent
 FROM log
 GROUP BY time::date;

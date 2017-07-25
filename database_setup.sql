@@ -24,7 +24,7 @@ ON articles.author = authors.id;
 
 -- daily_error_summary displays a table summarizing the error rate for each day
 -- as a percent.
-CREATE VIEW daily_error_summary AS
+CREATE VIEW daily_error_rates AS
 SELECT time::date AS date,
     100 * (COUNT(*) FILTER (WHERE status = '404 NOT FOUND') / 
            COUNT(*)::numeric) AS error_percent

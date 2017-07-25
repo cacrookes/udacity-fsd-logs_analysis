@@ -40,26 +40,25 @@ To set-up the database, follow these steps:
 
 #### execute_query(query, data=[])
 Execute a query and return the results as a list of tuples.
-Args:
+##### Args:
 1. query - (string) An SQL query statement to be executed.
 2. data - (optional list) A list of paramenters to pass to the query statement
-
-Returns:
+##### Returns:
 - A list of tuples containing the results of the query.
 
 #### print_error_days(threshold=1)
 Print out the days where more than a specifiec percentage of logged access requests were errors.
-Args:
+##### Args:
 1. threshold - (optional numeric value) Days with an error rate percentage exceeding threshold will be printed. Set to 1 by default.
 
 #### print_top_articles(limit='all')
 Print out the top specified number of articles of all time.
-Args:
+##### Args:
 1. limit - (optional integer) Specifies the number of results to return. Defaults to 'all'.
 
 #### print_top_authors(limit='all')
 Print out the top specified number of authors ranked by article views.
-Args:
+##### Args:
 1. limit - (optional integer) Specifies the number of results to return. Defaults to 'all'.
 
 ## Database Structure

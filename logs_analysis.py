@@ -126,20 +126,29 @@ def print_top_authors(limit='all'):
     __print_results(header, answers)
 
 
-def print_error_days():
+def print_error_days(threshold=1):
     """Prints out the days where more than 1% of
-    logged access requests were errors."""
+    logged access requests were errors.
+    
+        Args:
+          threshold - (optional numeric value) days with an error rate 
+            percentage exceeding threshold will be printed. Set to 1 by default
+    """
 
     query = """SELECT date, error_percent
                FROM daily_error_rates
-               WHERE error_percent > 1
+               WHERE error_percent > %s
                ORDER BY date;"""
-    results = execute_query(query)
-    header = 'Days With Over 1% Error Access Rate'
+    results = execute_query(query, [threshold,])
+    header = 'Days With Over {}% Error Access Rate'.format(threshold)
     # create a list of nicely formatted rows to print later
-    answers = ['{0:%B %d, %Y} -- {1:.2f}% errors'
-              .format(log_date, error_percent) 
-              for log_date, error_percent in results]
+    answers = []
+    if len(results) == 0:
+        answers = ['No results']
+    else:
+        answers = ['{0:%B %d, %Y} -- {1:.2f}% errors'
+                .format(log_date, error_percent) 
+                for log_date, error_percent in results]
     __print_results(header, answers)
 
 

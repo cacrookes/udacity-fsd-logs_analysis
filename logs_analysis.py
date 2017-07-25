@@ -130,16 +130,16 @@ def print_error_days():
     """Prints out the days where more than 1% of
     logged access requests were errors."""
 
-    query = """SELECT date, (error_404::numeric / access_request) AS error_rate
-               FROM daily_error_summary
-               WHERE (error_404::numeric / access_request) > 0.01
+    query = """SELECT date, error_percent
+               FROM daily_error_rates
+               WHERE error_percent > 1
                ORDER BY date;"""
     results = execute_query(query)
     header = 'Days With Over 1% Error Access Rate'
     # create a list of nicely formatted rows to print later
     answers = ['{0:%B %d, %Y} -- {1:.2f}% errors'
-              .format(log_date, error_rate * 100) 
-              for log_date, error_rate in results]
+              .format(log_date, error_percent) 
+              for log_date, error_percent in results]
     __print_results(header, answers)
 
 

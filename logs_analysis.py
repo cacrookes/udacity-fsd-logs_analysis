@@ -53,7 +53,7 @@ def __print_results(header, answers):
 def execute_query(query, data=[]):
     """execute_query takes an SQL query as a parameter.
         Executes the query and returns the results as a list of tuples.
-       
+
        Args:
            query - an SQL query statement to be executed.
 
@@ -74,33 +74,33 @@ def execute_query(query, data=[]):
 
 def print_top_articles(limit='all'):
     """Prints out the top 3 articles of all time.
-    
+
         Args:
-          limit - specifies the number of results to return. Defaults to 'all'.  
+          limit - specifies the number of results to return. Defaults to 'all'.
     """
     query = """SELECT title, views
                FROM article_views
                ORDER BY views DESC"""
-    
+
     # if a limit is specified, append limit clause to SQL query
     if limit == 'all':
         query += ';'
         results = execute_query(query)
     else:
         query += ' LIMIT %s;'
-        results = execute_query(query, [limit,])
+        results = execute_query(query, [limit, ])
 
     # create a list of nicely formatted rows to print later
     answers = ['\"{}\" -- {} views'.format(title, views)
                for title, views in results]
-    header = 'Top Articles By All Time Views' if limit=='all' else \
+    header = 'Top Articles By All Time Views' if limit == 'all' else \
              'Top {} Articles By All Time Views'.format(limit)
     __print_results(header, answers)
 
 
 def print_top_authors(limit='all'):
     """Prints a list of authors ranked by article views.
-        
+
         Args:
           limit - specifies the number of results to return. Defaults to 'all'.
     """
@@ -109,19 +109,18 @@ def print_top_authors(limit='all'):
                GROUP BY author
                ORDER BY views DESC"""
 
-
-     # if a limit is specified, append limit clause to SQL query
+    # if a limit is specified, append limit clause to SQL query
     if limit == 'all':
         query += ';'
         results = execute_query(query)
     else:
         query += ' LIMIT %s;'
-        results = execute_query(query, [limit,])
-        
-    header = 'Top Authors By All Time Views' if limit=='all' else \
+        results = execute_query(query, [limit, ])
+
+    header = 'Top Authors By All Time Views' if limit == 'all' else \
              'Top {} Authors By All Time Views'.format(limit)
     # create a list of nicely formatted rows to print later
-    answers = ['{} -- {} views'.format(title, views) 
+    answers = ['{} -- {} views'.format(title, views)
                for title, views in results]
     __print_results(header, answers)
 
@@ -129,17 +128,17 @@ def print_top_authors(limit='all'):
 def print_error_days(threshold=1):
     """Prints out the days where more than 1% of
     logged access requests were errors.
-    
+
         Args:
-          threshold - (optional numeric value) days with an error rate 
-            percentage exceeding threshold will be printed. Set to 1 by default
+          threshold - (optional numeric value) days with an error rate
+           percentage exceeding threshold will be printed. Set to 1 by default.
     """
 
     query = """SELECT date, error_percent
                FROM daily_error_rates
                WHERE error_percent > %s
                ORDER BY date;"""
-    results = execute_query(query, [threshold,])
+    results = execute_query(query, [threshold, ])
     header = 'Days With Over {}% Error Access Rate'.format(threshold)
     # create a list of nicely formatted rows to print later
     answers = []
@@ -147,8 +146,8 @@ def print_error_days(threshold=1):
         answers = ['No results']
     else:
         answers = ['{0:%B %d, %Y} -- {1:.2f}% errors'
-                .format(log_date, error_percent) 
-                for log_date, error_percent in results]
+                   .format(log_date, error_percent)
+                   for log_date, error_percent in results]
     __print_results(header, answers)
 
 

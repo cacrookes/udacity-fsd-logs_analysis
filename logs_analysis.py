@@ -51,8 +51,7 @@ def __print_results(header, answers):
 
 
 def execute_query(query, data=[]):
-    """execute_query takes an SQL query as a parameter.
-        Executes the query and returns the results as a list of tuples.
+    """Executes a query and returns the results as a list of tuples.
 
        Args:
            query - an SQL query statement to be executed.
@@ -73,7 +72,7 @@ def execute_query(query, data=[]):
 
 
 def print_top_articles(limit='all'):
-    """Prints out the top 3 articles of all time.
+    """Prints out the top articles of all time, sorted by number of views.
 
         Args:
           limit - specifies the number of results to return. Defaults to 'all'.
@@ -126,8 +125,8 @@ def print_top_authors(limit='all'):
 
 
 def print_error_days(threshold=1):
-    """Prints out the days where more than 1% of
-    logged access requests were errors.
+    """Prints out the days where more than a specified percentage of
+       logged access requests were errors.
 
         Args:
           threshold - (optional numeric value) days with an error rate

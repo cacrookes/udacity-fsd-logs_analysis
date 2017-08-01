@@ -109,16 +109,15 @@ ON articles.author = authors.id;
 
 #### daily_error_summary
 ```sql
-CREATE VIEW daily_error_summary AS
+CREATE VIEW daily_error_rates AS
 SELECT time::date AS date,
-COUNT(*) FILTER (WHERE status = '404 NOT FOUND') AS error_404,
-COUNT(*) AS access_request
+    100 * (COUNT(*) FILTER (WHERE status = '404 NOT FOUND') / 
+           COUNT(*)::numeric) AS error_percent
 FROM log
 GROUP BY time::date;
 ```
 
-*daily_error_summary* creates a table showing the number of *404 NOT FOUND* errors and total access requests for each day.
+*daily_error_summary* creates a table showing the error log rate as a percent for each day.
 - date: date summarized by the row
-- error_404: the number of *404 NOT FOUND* errors for the site on that date
-- access_requests: the total number of hits for the site, including successful and unsuccessful requests, for that day
+- error_percent: the percentage of access requests that were errors for that day.
 

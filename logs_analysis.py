@@ -1,4 +1,4 @@
-#!/usr/bin/etc python3
+#!/usr/bin/env python3
 """
 Project: Logs Analysis, for Udacity Fullstack Nanodegree
 Author: Christopher Crookes
